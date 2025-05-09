@@ -1,1 +1,0 @@
-# test-seleksi-ptsts-dipta-BE
