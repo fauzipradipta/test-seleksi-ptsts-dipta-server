@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "test-seleksi-ptsts-dipta-server": "file:"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
