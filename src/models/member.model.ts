@@ -1,4 +1,4 @@
-import pool from '../config/db.config';
+import pool from '../config/database';
 import { Member } from '../types/custom.types';
 
 
@@ -22,17 +22,21 @@ import { Member } from '../types/custom.types';
     return result.rows[0] || null;
 }
 
- const getMemberByKecamatan = async (kecamatan_id: number): Promise<Member[]> => {
+ const getMembersByKecamatan = async (kecamatan_id: number): Promise<Member[]> => {
     const result = await pool.query('SELECT m.* FROM members m JOIN kelurahan k ON m.kelurahan_id = k.id WHERE k.kecamatan_id = $1', [kecamatan_id]);
     return result.rows;
 }
 
- const getMemberByKabupaten = async (kabupaten_id: number): Promise<Member[]> => {
+ const getMembersByKabupaten = async (kabupaten_id: number): Promise<Member[]> => {
     const result = await pool.query('SELECT m.* FROM members m JOIN kelurahan k ON m.kelurahan_id = k.id JOIN kecamatan kc ON k.kecamatan_id = kc.id WHERE kc.kabupaten_id = $1', [kabupaten_id]);
     return result.rows;
 }
 
- const getMemberByProvinsi = async (provinsi_id: number): Promise<Member[]> => {
+const getMembersByKelurahan = async (kelurahan_id: number): Promise<Member[]> => {
+    const result = await pool.query('SELECT * FROM members WHERE kelurahan_id = $1', [kelurahan_id]);
+    return result.rows;
+}
+ const getMembersByProvinsi = async (provinsi_id: number): Promise<Member[]> => {
     const result = await pool.query('SELECT m.* FROM members m JOIN kelurahan k ON m.kelurahan_id = k.id JOIN kecamatan kc ON k.kecamatan_id = kc.id JOIN kabupaten kb ON kc.kabupaten_id = kb.id WHERE kb.provinsi_id = $1', [provinsi_id]);
     return result.rows;
 }
@@ -66,4 +70,4 @@ import { Member } from '../types/custom.types';
   }));
 };
 
-export  {getRecentRegistrations, getTodayRegistrations, getTotalMembers, getAllMembers, getMemberByProvinsi, getMemberByKabupaten, getMemberByKecamatan, getMemberById, createMember}
+export  {getRecentRegistrations, getTodayRegistrations, getTotalMembers, getAllMembers, getMembersByProvinsi, getMembersByKabupaten, getMembersByKecamatan, getMemberById, createMember,getMembersByKelurahan}

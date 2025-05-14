@@ -1,5 +1,5 @@
 import e from 'express';
-import pool from '../config/db.config';
+import pool from '../config/database';
 import { User,UserRole } from '../types/user.type';
 
 export const createUser = async (user: Omit<User, 'id'>): Promise<User> => {
