@@ -48,3 +48,4 @@ export interface RegistrationLog {
   member_id: number;
   registered_at: Date;
 }
+
