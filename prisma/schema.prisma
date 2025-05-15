@@ -6,10 +6,55 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  role       Role
+  domisiliId Int
+  domisili   domisili @relation(fields: [domisiliId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model domisili {
+  id       Int          @id @default(autoincrement())
+  name     String
+  type     domisiliType
+  parentId Int?
+  parent   domisili?    @relation("domisiliChildren", fields: [parentId], references: [id]) // Opposite relation field
+  children domisili[]   @relation("domisiliChildren") // Self-relation
+  users    User[]
+  members  Member[]
+}
+
+model Member {
+  id          Int      @id @default(autoincrement())
+  nik         String   @unique
+  name        String
+  phoneNumber String   @unique
+  domisiliId  Int
+  domisili    domisili @relation(fields: [domisiliId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+enum Role {
+  ADMIN_PUSAT
+  ADMIN_PROVINSI
+  ADMIN_KABUPATEN
+  ADMIN_KECAMATAN
+  ADMIN_KELURAHAN
+}
+
+enum domisiliType {
+  PROVINSI
+  KABUPATEN
+  KECAMATAN
+  KELURAHAN
 }
