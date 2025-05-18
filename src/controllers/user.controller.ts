@@ -14,10 +14,10 @@ export const getUsers = async (_req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username, password, role, domisiliId } = req.body;
+    const { username, password, role } = req.body;
 
     // Validate role
-    if (!Object.values(Role).includes(role)) {
+    if (!username || !password || !role) {
       // return res.status(400).json({ message: 'Invalid role' });
        res.status(400).json({ message: 'Invalid role' });
     }
@@ -27,7 +27,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
 
     // Create the user
     const user = await prisma.user.create({
-      data: { username, password: hashedPassword, role, domisiliId },
+      data: { username, password: hashedPassword, role },
     });
 
     // Send success response

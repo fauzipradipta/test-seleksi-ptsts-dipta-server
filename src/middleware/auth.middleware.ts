@@ -31,13 +31,13 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
 
 export const authorizeRole = (role: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const userRole = req.user?.role; // Assuming `req.user` contains the authenticated user's info
+    const userRole = req.user?.role; 
 
     if (userRole === role) {
-      return next(); // Proceed to the next middleware
+      return next(); 
     }
 
-    // If the role does not match, send a 403 Forbidden response
+    
     return res.status(403).json({ message: 'Forbidden: Insufficient role' });
   };
 };

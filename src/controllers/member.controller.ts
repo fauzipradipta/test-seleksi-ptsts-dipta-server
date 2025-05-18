@@ -4,16 +4,16 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const registerMember = async (req: Request, res: Response) => {
-  const { nik, name, phone, provinsiId, kabupatenId, kecamatanId, kelurahanId } = req.body;
+  const { nik, name, phoneNumber, provinsiId, kabupatenId, kecamatanId, kelurahanId } = req.body;
 
   // Validation
   if (!/^\d{16}$/.test(nik)) return res.status(400).json({ message: 'Invalid NIK format' });
   if (!name) return res.status(400).json({ message: 'Name is required' });
-  if (!/^\d+$/.test(phone)) return res.status(400).json({ message: 'Invalid phone format' });
+  if (!/^\d+$/.test(phoneNumber)) return res.status(400).json({ message: 'Invalid phone format' });
 
   // Check uniqueness
   const exists = await prisma.member.findFirst({
-    where: { OR: [{ nik }, { phone }] }
+    where: { OR: [{ nik }, { phoneNumber }] }
   });
   if (exists) return res.status(400).json({ message: 'NIK or phone already registered' });
 
@@ -21,7 +21,7 @@ export const registerMember = async (req: Request, res: Response) => {
     data: {
       nik,
       name,
-      phone,
+      phoneNumber,
       provinsiId,
       kabupatenId,
       kecamatanId,

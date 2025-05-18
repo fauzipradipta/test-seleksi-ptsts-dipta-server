@@ -13,7 +13,7 @@ router.use(authenticate);
 router.use((req, res, next) => authorizeRole('ADMIN_PUSAT')(req, res, next)); 
 
 router.get('/', getUsers);
-router.post('/', createUser);
+router.post('/create-user', createUser);
 router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
 
