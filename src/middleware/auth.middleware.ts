@@ -14,17 +14,30 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-export const authorizeRole = (...roles: string[]) => {
+// export const authorizeRole = (role: string) => {
+//   return (req: Request, res: Response, next: NextFunction) => {
+//     // if (!req.user || !roles.includes(req.user.role)) {
+//     //   return res.status(403).json({ message: 'Forbidden' });
+//     // }
+//     // next();
+//     const userRole = req.user?.roles;
+//     if(userRole === role){
+//       return next();
+//     }
+
+//     return res.status(403).json({ message: 'Forbidden' });
+//   };
+// };
+
+export const authorizeRole = (role: string) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    // if (!req.user || !roles.includes(req.user.role)) {
-    //   return res.status(403).json({ message: 'Forbidden' });
-    // }
-    // next();
-    const userRole = req.user?.roles;
-    if(userRole === roles){
-      return next();
+    const userRole = req.user?.role; // Assuming `req.user` contains the authenticated user's info
+
+    if (userRole === role) {
+      return next(); // Proceed to the next middleware
     }
 
-    return res.status(403).json({ message: 'Forbidden' });
+    // If the role does not match, send a 403 Forbidden response
+    return res.status(403).json({ message: 'Forbidden: Insufficient role' });
   };
 };

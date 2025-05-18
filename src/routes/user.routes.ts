@@ -10,7 +10,7 @@ import { authenticate, authorizeRole } from '../middleware/auth.middleware';
 const router = Router();
 
 router.use(authenticate);
-router.use(authorizeRole('ADMIN_PUSAT'));
+router.use((req, res, next) => authorizeRole('ADMIN_PUSAT')(req, res, next)); 
 
 router.get('/', getUsers);
 router.post('/', createUser);
