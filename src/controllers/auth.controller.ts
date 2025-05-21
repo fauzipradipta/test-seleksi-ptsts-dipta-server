@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../config/database';
 import dotenv from 'dotenv';
-import { log } from 'console';
+
 
 dotenv.config();
 

@@ -7,7 +7,7 @@ import excel from 'exceljs';
 
 export const registerMember = async (req: Request, res: Response) => {
   try {
-    const { nik, name, phone, provinceId, regencyId, districtId, villageId } = req.body;
+    const { nik, name, phone, province, regency, district, village } = req.body;
 
     // Validate NIK (16 digits)
     if (!/^\d{16}$/.test(nik)) {
@@ -24,17 +24,17 @@ export const registerMember = async (req: Request, res: Response) => {
         nik,
         name,
         phone,
-        provinceId,
-        regencyId,
-        districtId,
-        villageId
+        province,
+        regency,
+        district,
+        village
       },
-      include: {
-        province: true,
-        regency: true,
-        district: true,
-        village: true
-      }
+      // include: {
+      //   province: true,
+      //   regency: true,
+      //   district: true,
+      //   village: true
+      // }
     });
 
     res.status(201).json(member);
