@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../config/database';
 import dotenv from 'dotenv';
+import { log } from 'console';
 
 dotenv.config();
 
@@ -17,10 +18,22 @@ export const login = async (req: Request, res: Response) => {
       include: { region: true },
     });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    // || !(await bcrypt.compare(password, user.password))
+    if (!user) {
+      console.log('user not found');
+      
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    console.log('Stored password hash:', user.password);
+    console.log('Comparing with input password:', password);
+
+    const isValid = await bcrypt.compare(password, user.password);
+    console.log('Password Valid?:', isValid);
+    
+    if(!isValid) {
+       return res.status(401).json({ message: 'Invalid credentials' });
+    }
     if (!JWT_SECRET) {
       throw new Error('JWT_SECRET is not defined');
     }
