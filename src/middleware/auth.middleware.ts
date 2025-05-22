@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import prisma from '../config/database';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');

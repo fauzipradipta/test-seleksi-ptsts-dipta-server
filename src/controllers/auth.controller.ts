@@ -10,8 +10,7 @@ export const login = async (req: Request, res: Response) => {
     const { username, password } = req.body;
 
     const user = await prisma.user.findUnique({
-      where: { username },
-      include: { region: true }
+      where: { username }
     });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -25,14 +24,39 @@ export const login = async (req: Request, res: Response) => {
       user: {
         id: user.id,
         username: user.username,
-        role: user.role,
-        region: user.region
+        regionLevel: user.regionLevel,
+        regionId: user.regionId
       }
     });
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error });
   }
 };
+
+export const registerUser = async (req: Request, res: Response) => {
+  try {
+    const { username, password, regionLevel } = req.body;
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        username,
+        password: hashedPassword,
+        regionLevel,
+      }
+    });
+
+    res.status(201).json(user);
+  } catch (error) {
+    if (error.code === 'P2002') {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+    res.status(500).json({ message: 'Error registering user', error });
+  }
+}
+
 
 export const getCurrentUser = async (req: Request, res: Response) => {
   try {

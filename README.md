@@ -11,6 +11,6 @@ npx prisma generate
 db using mysql workspace
 
 inside .env file: 
-DATABASE_URL="mysql://root:password@localhost:3306/orgx_db"
+DATABASE_URL="mysql://root:password@localhost:3306/your_db name"
 JWT_SECRET="your_jwt_secret"
 PORT=5000
