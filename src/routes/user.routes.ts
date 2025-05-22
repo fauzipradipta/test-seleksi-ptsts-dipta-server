@@ -15,10 +15,6 @@ router.post('/auth/login', login);
 router.get('/auth/me', authenticate, getCurrentUser);
 router.post('/register-admin', registerUser);
 
-// Member routes
-router.post('/members', registerMember);
-router.get('/members', authenticate, getMembers);
-router.get('/members/export', authenticate, exportMembers);
 
 // Dashboard route
 router.get('/dashboard', authenticate, getDashboardStats);

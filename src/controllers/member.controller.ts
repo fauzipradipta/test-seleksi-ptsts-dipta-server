@@ -5,42 +5,37 @@ import excel from 'exceljs';
 
 export const registerMember = async (req: Request, res: Response) => {
   try {
-    const { nik, name, phone, provinceId, regencyId, districtId, villageId } = req.body;
+    const { nik, name, phone, province, regency, district, village } = req.body;
 
-    // Validate NIK (16 digits)
+    // Validation (keep your existing validation)
     if (!/^\d{16}$/.test(nik)) {
       return res.status(400).json({ message: 'NIK must be 16 digits' });
     }
-
-    // Validate phone number
     if (!/^\d+$/.test(phone)) {
       return res.status(400).json({ message: 'Phone number must be numeric' });
     }
 
+    // Create member with string region names
     const member = await prisma.member.create({
       data: {
         nik,
         name,
         phone,
-        provinceId,
-        regencyId,
-        districtId,
-        villageId
-      },
-      include: {
-        province: true,
-        regency: true,
-        district: true,
-        village: true
+        province,  
+        regency,   
+        district,  
+        village    
+        
       }
     });
 
     res.status(201).json(member);
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === 'P2002') {
       return res.status(400).json({ message: 'NIK or phone number already exists' });
     }
-    res.status(500).json({ message: 'Error registering member', error });
+    console.error('Full error:', error);  // Better error logging
+    res.status(500).json({ message: 'Error registering member', error: error.message });
   }
 };
 

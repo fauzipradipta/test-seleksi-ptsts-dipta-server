@@ -45,10 +45,10 @@ model Member {
   nik       String   @unique
   name      String
   phone     String   @unique
-  province  String // Kept as text input
-  regency   String // Kept as text input
-  district  String // Kept as text input
-  village   String // Kept as text input
+  province  String 
+  regency   String 
+  district  String 
+  village   String 
   region    Region?  @relation(fields: [regionId], references: [id])
   regionId  Int?
   createdAt DateTime @default(now())
