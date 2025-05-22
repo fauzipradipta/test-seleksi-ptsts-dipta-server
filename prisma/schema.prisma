@@ -28,36 +28,36 @@ enum Role {
 }
 
 model Region {
-  id         Int           @id @default(autoincrement())
-  name       String
-  level      RegionLevel
-  parentId   Int?
-  parent     Region?       @relation("RegionHierarchy", fields: [parentId], references: [id])
-  children   Region[]      @relation("RegionHierarchy")
-  members    Member[]      @relation("RegionToMember")
-  users      User[]
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
+  id        Int         @id @default(autoincrement())
+  name      String
+  level     RegionLevel
+  parentId  Int?
+  parent    Region?     @relation("RegionHierarchy", fields: [parentId], references: [id])
+  children  Region[]    @relation("RegionHierarchy")
+  members   Member[]    @relation("RegionToMember") // <-- relation name here
+  users     User[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
 enum RegionLevel {
-  PUSAT
   PROVINSI
   KABUPATEN
   KECAMATAN
   KELURAHAN
 }
+
 model Member {
-  id          Int      @id @default(autoincrement())
-  nik         String   @unique
-  name        String
-  phone       String   @unique
-  province    String   
-  regency     String   
-  district    String   
-  village     String   
-  region      Region?  @relation(fields: [regionId], references: [id])
-  regionId    Int?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  nik       String   @unique
+  name      String
+  phone     String   @unique
+  province  String
+  regency   String
+  district  String
+  village   String
+  region    Region?  @relation("RegionToMember", fields: [regionId], references: [id]) // <-- same relation name here
+  regionId  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
