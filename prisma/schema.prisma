@@ -28,44 +28,36 @@ enum Role {
 }
 
 model Region {
-  id       Int         @id @default(autoincrement())
-  name     String
-  level    RegionLevel
-  parentId Int?
-  parent   Region?     @relation("RegionHierarchy", fields: [parentId], references: [id])
-  children Region[]    @relation("RegionHierarchy")
-  members  Member[]    @relation("RegionToMember")
-  users    User[]
-
-  // Add these back-relations:
-  provinceMembers Member[] @relation("MemberProvince")
-  regencyMembers  Member[] @relation("MemberRegency")
-  districtMembers Member[] @relation("MemberDistrict")
-  villageMembers  Member[] @relation("MemberVillage")
+  id         Int           @id @default(autoincrement())
+  name       String
+  level      RegionLevel
+  parentId   Int?
+  parent     Region?       @relation("RegionHierarchy", fields: [parentId], references: [id])
+  children   Region[]      @relation("RegionHierarchy")
+  members    Member[]      @relation("RegionToMember")
+  users      User[]
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 }
 
 enum RegionLevel {
+  PUSAT
   PROVINSI
   KABUPATEN
   KECAMATAN
   KELURAHAN
 }
-
 model Member {
-  id         Int      @id @default(autoincrement())
-  nik        String   @unique
-  name       String
-  phone      String   @unique
-  provinceId Int
-  province   Region   @relation("MemberProvince", fields: [provinceId], references: [id])
-  regencyId  Int
-  regency    Region   @relation("MemberRegency", fields: [regencyId], references: [id])
-  districtId Int
-  district   Region   @relation("MemberDistrict", fields: [districtId], references: [id])
-  villageId  Int
-  village    Region   @relation("MemberVillage", fields: [villageId], references: [id])
-  regionId   Int?
-  region     Region?  @relation("RegionToMember", fields: [regionId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  nik         String   @unique
+  name        String
+  phone       String   @unique
+  province    String   
+  regency     String   
+  district    String   
+  village     String   
+  region      Region?  @relation(fields: [regionId], references: [id])
+  regionId    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
