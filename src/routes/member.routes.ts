@@ -5,6 +5,7 @@ import {
   registerMember,
   getMembers,
   exportMembers,
+  getAllMembers,
 } from '../controllers/member.controller';
 
 
@@ -13,5 +14,5 @@ const router = Router();
 router.post('/members/register', registerMember);
 router.get('/get-members',  getMembers);
 router.get('/members/export', exportMembers);
-
+router.get('/get-all-members',getAllMembers);
 export default router;

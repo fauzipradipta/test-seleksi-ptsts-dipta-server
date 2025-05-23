@@ -3,6 +3,23 @@ import prisma from '../config/database';
 import { RegionLevel } from '@prisma/client';
 import excel from 'exceljs';
 
+interface Location {
+  id: string;
+  name: string;
+}
+
+interface MemberResponse {
+  id: string;
+  nik: string;
+  name: string;
+  phone: string;
+  province: Location;
+  regency: Location;
+  district: Location;
+  village: Location;
+  createdAt: Date;
+}
+
 export const registerMember = async (req: Request, res: Response) => {
   try {
     const { nik, name, phone, province, regency, district, village } = req.body;
@@ -227,3 +244,62 @@ export const getDashboardStats = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error fetching dashboard stats', error });
   }
 };
+
+export const getAllMembers = async (req: Request, res: Response) => {
+   try {
+    const members = await prisma.member.findMany({
+      include: {
+        province: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        regency: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        district: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        village: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+
+    // Transform the data if needed
+    const response: MemberResponse[] = members.map(member => ({
+      id: member.id,
+      nik: member.nik,
+      name: member.name,
+      phone: member.phone,
+      province: member.province,
+      regency: member.regency,
+      district: member.district,
+      village: member.village,
+      createdAt: member.createdAt
+    }));
+
+    console.log('Returning members:', response.length); // Debug log
+    res.status(200).json(response);
+  } catch (error) {
+    console.error('Error in getAllMembers:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch members',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}

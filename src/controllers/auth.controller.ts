@@ -77,3 +77,22 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error fetching user', error });
   }
 };
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const admins = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        regionLevel: true,
+        regionId: true,
+        createdAt: true
+      }
+    });
+    res.json(admins);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching admins', error });
+  }
+}
+
+
