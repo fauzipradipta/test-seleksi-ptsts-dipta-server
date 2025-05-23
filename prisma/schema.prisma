@@ -27,6 +27,7 @@ model Region {
   parent    Region?     @relation("RegionHierarchy", fields: [parentId], references: [id])
   children  Region[]    @relation("RegionHierarchy")
   members   Member[]
+
   users     User[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
@@ -50,6 +51,7 @@ model Member {
   district  String 
   village   String 
   region    Region?  @relation(fields: [regionId], references: [id])
+
   regionId  Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

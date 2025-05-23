@@ -20,6 +20,7 @@ interface MemberResponse {
   createdAt: Date;
 }
 
+
 export const registerMember = async (req: Request, res: Response) => {
   try {
     const { nik, name, phone, province, regency, district, village } = req.body;
@@ -44,6 +45,8 @@ export const registerMember = async (req: Request, res: Response) => {
         village    
         
       }
+
+     
     });
 
     res.status(201).json(member);
@@ -175,7 +178,7 @@ export const exportMembers = async (req: Request, res: Response) => {
       'attachment; filename=members.xlsx'
     );
 
-    // Send the workbook
+  
     await workbook.xlsx.write(res);
     res.end();
   } catch (error) {
