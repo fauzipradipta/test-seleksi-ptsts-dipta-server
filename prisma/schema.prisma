@@ -9,22 +9,14 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String
-  role      Role     @default(KELURAHAN)
-  regionId  Int
-  region    Region   @relation(fields: [regionId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-enum Role {
-  PUSAT
-  PROVINSI
-  KABUPATEN
-  KECAMATAN
-  KELURAHAN
+  id          Int         @id @default(autoincrement())
+  username    String      @unique
+  password    String
+  regionLevel RegionLevel
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  Region      Region?     @relation(fields: [regionId], references: [id])
+  regionId    Int?
 }
 
 model Region {
@@ -34,13 +26,15 @@ model Region {
   parentId  Int?
   parent    Region?     @relation("RegionHierarchy", fields: [parentId], references: [id])
   children  Region[]    @relation("RegionHierarchy")
-  members   Member[]    @relation("RegionToMember") // <-- relation name here
+  members   Member[]
+
   users     User[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
 
 enum RegionLevel {
+  PUSAT
   PROVINSI
   KABUPATEN
   KECAMATAN
@@ -52,11 +46,12 @@ model Member {
   nik       String   @unique
   name      String
   phone     String   @unique
-  province  String
-  regency   String
-  district  String
-  village   String
-  region    Region?  @relation("RegionToMember", fields: [regionId], references: [id]) // <-- same relation name here
+  province  String 
+  regency   String 
+  district  String 
+  village   String 
+  region    Region?  @relation(fields: [regionId], references: [id])
+
   regionId  Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
